@@ -1,14 +1,20 @@
-import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import React, { useContext } from 'react'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import SignUp from './pages/Signup'
 import SignIn from './pages/Signin'
+import Customize from './pages/Customize'
+import { UserDataContext } from './context/userContext'
+import Home from './Home'
 
 
 function App() {
+  const {userData,setUserData}=useContext(UserDataContext);
   return (
     <Routes>
-        <Route path="/signup" element={<SignUp/>} />
-        <Route path="/signin" element={<SignIn/>} />
+        <Route path="/" element={(userData?.assistantImage && userData?.assistantName)? <Home/> : <Navigate to={"/customize"}/> } />
+        <Route path="/signup" element={!userData?<SignUp/>:<Navigate to={"/"}/>} />
+        <Route path="/signin" element={!userData?<SignIn/>:<Navigate to={"/"}/>} />
+        <Route path="/customize" element={userData?<Customize/>:<Navigate to={"/signin"}/>} />
     </Routes>
   )
 }

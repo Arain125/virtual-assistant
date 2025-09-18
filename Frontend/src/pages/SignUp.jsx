@@ -1,22 +1,53 @@
-import React, { useState } from 'react'
+import React, {  useContext, useState } from 'react'
 import bg from '../assets/authBg.png'
 import { IoEyeSharp } from "react-icons/io5"
 import { IoEyeOffSharp } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { UserDataContext } from '../context/userContext';
 
 function SignUp() {
     const[showPassword, setShowPassword] = useState(false);
+    const {serverUrl,userData,setUserData}=useContext(UserDataContext);
+    const navigate=useNavigate();
+    const [name, setName] = useState("")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [loading, setLoading] = useState(false);
+const [err, setErr] = useState("")
+    const handleSignUp=async(e)=>{
+      e.preventDefault();
+      setErr("")
+      setLoading(true)
+      try {
+        let result=await axios.post(`${serverUrl}/api/auth/signup`,{
+          name,email,password
+        }, {withCredentials:true} )
+        setUserData(result.data)
+        setLoading(false)
+        navigate("/customize")
+    }
+      catch (error) {
+        console.log(error)
+        setUserData(null)
+        setLoading(false)
+        setErr(error.response.data.message)
+      }
+    }
   return (
     <div className='w-full h-[100vh] bg-cover flex justify-center items-center' style={{backgroundImage: `url(${bg})`}} >
-      <form className='w-[90%] h-[600px] max-w-[500px] bg-[#00000062] backdrop-blur shadow-lg shadow-black flex flex-col items-center justify-center gap-[20px] px-[20px]'>
+      <form className='w-[90%] h-[600px] max-w-[500px] bg-[#00000062] backdrop-blur shadow-lg shadow-black flex flex-col items-center justify-center gap-[20px] px-[20px]' onSubmit={handleSignUp}>
         <h1 className='text-white text-[30px] font-semibold mb-[30px]'>Register to <span className='text-blue-400'>Virtual Assistant</span></h1>
-        <input type="text" placeholder='Enter your Name' className='w-full h-[60px] outline-none border-2 border-white bg-transparent text-white placeholder-gray-300 px-[20px] py-[10px] rounded-full text-[18px]' />
-        <input type="email" placeholder='Enter your Email' className='w-full h-[60px] outline-none border-2 border-white bg-transparent text-white placeholder-gray-300 px-[20px] py-[10px] rounded-full text-[18px]' />
+        <input type="text" placeholder='Enter your Name' className='w-full h-[60px] outline-none border-2 border-white bg-transparent text-white placeholder-gray-300 px-[20px] py-[10px] rounded-full text-[18px]' required onChange={(e)=>setName(e.target.value)} value={name} />
+        <input type="email" placeholder='Enter your Email' className='w-full h-[60px] outline-none border-2 border-white bg-transparent text-white placeholder-gray-300 px-[20px] py-[10px] rounded-full text-[18px]' required onChange={(e)=>setEmail(e.target.value)} value={email} />
      <div className='w-full h-[60px] outline-none border-2 border-white bg-transparent text-white   rounded-full text-[18px] relative '>
-        <input type={showPassword? "text":"password" } placeholder='Enter you password' className='w-full h-full rounded-full outline-none bg-transparent placeholder-gray-300 px-[20px] py-[10px]'/>
+        <input type={showPassword? "text":"password" } placeholder='Enter you password' className='w-full h-full rounded-full outline-none bg-transparent placeholder-gray-300 px-[20px] py-[10px]' required onChange={(e)=>setPassword(e.target.value)} value={password}/>
     {!showPassword && <IoEyeSharp className='absolute top-[18px] right-[20px] text-[white] h-[25px] w-[25px] cursor-pointer'  onClick={() => setShowPassword(true)}/>}
      {showPassword && <IoEyeOffSharp className='absolute top-[18px] right-[20px] text-[white] h-[25px] w-[25px] cursor-pointer'  onClick={() => setShowPassword(false)}/>}
-    
     </div>
+    {err.length>0 && <p className='text-red-500 text-[17px]'>{err}</p>} 
+    <button className='min-w-[150px] h-[60px] mt-[30px] text-black font-semibold bg-white rounded-full text-[19px]' disabled = {loading}>{loading?"Loading...":"Sign up"} </button>
+    <p className='text-[white] text-[18px] '>Already have an account ? <span className='text-blue-400 cursor-pointer' onClick={()=>navigate("/signin")}>Sign in</span></p>
       </form>
     </div>
   )
