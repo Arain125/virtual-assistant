@@ -4,7 +4,7 @@ import { IoEyeSharp } from "react-icons/io5"
 import { IoEyeOffSharp } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { UserDataContext } from '../context/userContext';
+import { UserDataContext } from '../context/UserContext';
 
 function SignIn() {
     const[showPassword, setShowPassword] = useState(false);

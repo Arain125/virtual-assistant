@@ -4,6 +4,9 @@ import axios from 'axios'
 function UserContext({children}) {
     const serverUrl="http://localhost:8000"
     const[userData,setUserData]=useState(null)
+    const [froentImage, setFrontImage] = useState(null);
+    const [backendImage, setBackendImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null);
 
     const handlecurrentUser=async()=>{
       try{
@@ -14,11 +17,28 @@ function UserContext({children}) {
         console.log(error)
       }
     }
+
+    const getGeminiResponse=async(command)=>{
+      try{
+
+        const result=await axios.post(`${serverUrl}/api/user/asktoassistant`,{command},{ withCredentials:true})
+        console.log("result",result);
+        
+        return result.data
+      }
+      catch(error){
+        console.log(error) 
+      }
+    }
+
+
+
+    
     useEffect(()=>{
       handlecurrentUser()
     },[])
     const value={
-serverUrl,userData,setUserData
+serverUrl,userData,setUserData , froentImage, setFrontImage, backendImage, setBackendImage , selectedImage, setSelectedImage ,getGeminiResponse
     }
   return (
     <div>

@@ -4,7 +4,7 @@ import { IoEyeSharp } from "react-icons/io5"
 import { IoEyeOffSharp } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { UserDataContext } from '../context/userContext';
+import { UserDataContext } from '../context/UserContext';
 
 function SignUp() {
     const[showPassword, setShowPassword] = useState(false);
@@ -45,8 +45,8 @@ const [err, setErr] = useState("")
     {!showPassword && <IoEyeSharp className='absolute top-[18px] right-[20px] text-[white] h-[25px] w-[25px] cursor-pointer'  onClick={() => setShowPassword(true)}/>}
      {showPassword && <IoEyeOffSharp className='absolute top-[18px] right-[20px] text-[white] h-[25px] w-[25px] cursor-pointer'  onClick={() => setShowPassword(false)}/>}
     </div>
-    {err.length>0 && <p className='text-red-500 text-[17px]'>{err}</p>} 
-    <button className='min-w-[150px] h-[60px] mt-[30px] text-black font-semibold bg-white rounded-full text-[19px]' disabled = {loading}>{loading?"Loading...":"Sign up"} </button>
+    {err.length>0 && <p className='text-red-500 text-[17px]'>{err}</p>}  <button className='min-w-[150px] h-[60px] mt-[30px] text-black font-semibold bg-white rounded-full text-[19px]' disabled = {loading}>{loading?"Loading...":"Sign up"} </button>
+   
     <p className='text-[white] text-[18px] '>Already have an account ? <span className='text-blue-400 cursor-pointer' onClick={()=>navigate("/signin")}>Sign in</span></p>
       </form>
     </div>
