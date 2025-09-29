@@ -128,7 +128,7 @@ export const askToAssistant = async (req, res) => {
     console.log(JSON.stringify(result));
 
     const jsonMatch = result.match(/{[\s\S]*}/);
-    console.log("jsonMatch", jsonMatch);
+     
 
     // agar JSON match NAHI mila to error bhejo
     if (!jsonMatch) {
@@ -136,6 +136,7 @@ export const askToAssistant = async (req, res) => {
     }
 
     const gemResult = JSON.parse(jsonMatch[0]);
+    console.log("gemResult", gemResult);
     const type = gemResult.type;
 
     switch (type) {
@@ -167,14 +168,15 @@ export const askToAssistant = async (req, res) => {
           response: `Current month is ${moment().format("MMMM")}`,
         });
 
-      case "google_search":
-      case "youtube_search":
-      case "youtube_play":
-      case "calculator_open":
-      case "instagram_open":
-      case "facebook_open":
-      case "weather_show":
+      case "google-search":
+      case "youtube-search":
+      case "youtube-play":
       case "general":
+      case "calculator-open":
+      case "instagram-open":
+      case "facebook-open":
+      case "weather-show":
+      
         return res.json({
           type,
           userInput: gemResult.userInput,
